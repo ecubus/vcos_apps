@@ -5,7 +5,6 @@ vcos_apps仓库是NuttX开源应用开发包仓库，提供丰富的工具、she
 
 智能车控OS（VCOS）根据车载，智驾等项目需求在本仓库按需扩展应用开发包
 
-
 ## 2. 代码目录
 vcos_apps源代码在haloosspace/vcos/apps目录下，目录结构如下图所示：
 ```
@@ -13,7 +12,7 @@ apps
 ├── Application.mk
 ├── audioutils      # Audio 工具
 ├── benchmarks      # 性能测试工具
-├── boot            # MCU booloader
+├── boot            # MCU bootloader
 ├── builtin         # 内置应用脚本框架
 ├── canutils        # CAN 工具
 ├── cmake
@@ -27,7 +26,7 @@ apps
 ├── games           # 游戏库
 ├── graphics        # GUI图形库
 ├── import          # Kernel/Protect mode 编译脚本
-├── include         # 应用开发包include
+├── include         # 应用开发包的头文件
 ├── industry        # 工业级驱动/应用
 ├── inertial        # 飞控算法
 ├── interpreters    # 解释器 wasm/js/etc
@@ -38,7 +37,7 @@ apps
 ├── Makefile
 ├── math            # 算法库
 ├── mlearning       # 机器学习
-├── modbus          # 总线 / 软总线
+├── modbus          # 总线 / 软总线通信协议
 ├── netutils        # 网络上层工具 DHCP/telnet/curl
 ├── NOTICE          # 通知文件
 ├── nshlib          # NuttX Shell 库
@@ -50,7 +49,7 @@ apps
 ├── testing         # 测试框架
 ├── tools           # 工具
 ├── videoutils      # 视频工具
-└── wireless        # 无线协议用户态库实现 BLE/wireless等
+└── wireless        # 无线协议用户态库实现 如BLE等
 ```
 ## 3. 仓库使用入门
-vcos_apps仓库使用入门参照[NuttX-app项目自述文档](./README.md)
+有关vcos_apps仓库使用入门，请参考[NuttX-app项目自述文档](./README.md)

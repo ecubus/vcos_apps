@@ -225,6 +225,9 @@ FAR static void *nxevent_thread2(pthread_addr_t arg)
 
 void nxevent_test(void)
 {
+#if defined(CONFIG_RT_FRAMEWORK) && (CONFIG_RT_FRAMEWORK == 1)
+  nxevent_wait_t wait;
+#endif
   nxevent_t event = NXEVENT_INITIALIZER(event, ~0);
   nxevent_t event1 = NXEVENT_INITIALIZER(event1, 0);
   struct nevent_comb_s nevent_comb = {&event, &event1};
@@ -266,8 +269,13 @@ void nxevent_test(void)
   nxevent_post(&event, 1 << 2, 0);
   nxevent_post(&event, 1 << 3, 0);
 
+#if defined(CONFIG_RT_FRAMEWORK) && (CONFIG_RT_FRAMEWORK == 1)
+  NXEVENT_TEST(nxevent_tickwait(&wait, &event, ~0,
+                                NXEVENT_WAIT_ALL, 0), 0);
+#else
   NXEVENT_TEST(nxevent_tickwait(&event, ~0,
                                 NXEVENT_WAIT_ALL, 0), 0);
+#endif
 
   /* Case 1.6: post == 0xf, trywait == 0xf */
 

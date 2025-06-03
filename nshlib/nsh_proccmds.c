@@ -41,6 +41,10 @@
 #include "nsh.h"
 #include "nsh_console.h"
 
+#if defined(CONFIG_RT_FRAMEWORK_MEMORY_PROTECTION) && (CONFIG_RT_FRAMEWORK_MEMORY_PROTECTION== 1)
+#include <arch/chip/mpu.h>
+#endif
+
 /****************************************************************************
  * Pre-processor Definitions
  ****************************************************************************/
@@ -685,7 +689,13 @@ static int ps_callback(FAR struct nsh_vtbl_s *vtbl, FAR const char *dirpath,
   status.td_buf = vtbl->iobuffer;
   status.td_bufsize = IOBUFFERSIZE;
 
+#if defined(CONFIG_RT_FRAMEWORK_MEMORY_PROTECTION) && (CONFIG_RT_FRAMEWORK_MEMORY_PROTECTION== 1)
+  up_mpu_enable(0U);
+#endif
   ret = ps_record(vtbl, dirpath, entryp, heap, &status);
+#if defined(CONFIG_RT_FRAMEWORK_MEMORY_PROTECTION) && (CONFIG_RT_FRAMEWORK_MEMORY_PROTECTION== 1)
+  up_mpu_enable(1U);
+#endif
   if (ret < 0)
     {
       return ret;

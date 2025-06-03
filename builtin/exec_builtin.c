@@ -35,7 +35,7 @@
  * Private Functions
  ****************************************************************************/
 
-#if (CONFIG_NSH_BUILTIN_AS_COMMAND == 1)
+#ifdef CONFIG_NSH_BUILTIN_AS_COMMAND
 /****************************************************************************
  * name: run_builtin_as_command
  ****************************************************************************/
@@ -117,7 +117,7 @@ int exec_builtin(FAR const char *appname, FAR char * const *argv,
       goto errout_with_errno;
     }
 
-#if (CONFIG_NSH_BUILTIN_AS_COMMAND == 1)
+#ifdef CONFIG_NSH_BUILTIN_AS_COMMAND
   run_builtin_as_command(builtin, argv);
   return 0;
 #endif /* CONFIG_NSH_BUILTIN_AS_COMMAND */

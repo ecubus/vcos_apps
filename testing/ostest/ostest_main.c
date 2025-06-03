@@ -40,6 +40,10 @@
 #include <sys/boardctl.h>
 #endif
 
+#if defined(CONFIG_RT_FRAMEWORK_MEMORY_PROTECTION) && (CONFIG_RT_FRAMEWORK_MEMORY_PROTECTION== 1)
+#include <arch/chip/mpu.h>
+#endif
+
 #include <nuttx/init.h>
 
 #include "ostest.h"
@@ -660,6 +664,10 @@ static void stdio_test(void)
 
 int main(int argc, FAR char **argv)
 {
+#if defined(CONFIG_RT_FRAMEWORK_MEMORY_PROTECTION) && (CONFIG_RT_FRAMEWORK_MEMORY_PROTECTION== 1)
+  up_mpu_enable(0U);
+#endif
+
 #ifdef CONFIG_TESTING_OSTEST_WAITRESULT
   int ostest_result = ERROR;
 #else
@@ -772,6 +780,10 @@ int main(int argc, FAR char **argv)
    */
 
   boardctl(BOARDIOC_POWEROFF, ostest_result);
+#endif
+
+#if defined(CONFIG_RT_FRAMEWORK_MEMORY_PROTECTION) && (CONFIG_RT_FRAMEWORK_MEMORY_PROTECTION== 1)
+  up_mpu_enable(1U);
 #endif
 
   return ostest_result;

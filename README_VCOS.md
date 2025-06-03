@@ -1,13 +1,16 @@
 # vcos_apps代码仓库说明
 
 ## 1. 代码仓库简介
+
 vcos_apps仓库是NuttX开源应用开发包仓库，提供丰富的工具、shell、网络实用程序、库和解释器等。本仓库可与NuttX RTOS/VCOS RTOS内核配合使用，扩展内核功能，支撑项目需求
 
 智能车控OS（VCOS）根据车载，智驾等项目需求在本仓库按需扩展应用开发包
 
 ## 2. 代码目录
+
 vcos_apps源代码在haloosspace/vcos/apps目录下，目录结构如下图所示：
-```
+
+```text
 apps
 ├── Application.mk
 ├── audioutils      # Audio 工具
@@ -51,5 +54,7 @@ apps
 ├── videoutils      # 视频工具
 └── wireless        # 无线协议用户态库实现 如BLE等
 ```
+
 ## 3. 仓库使用入门
+
 有关vcos_apps仓库使用入门，请参考[NuttX-app项目自述文档](./README.md)

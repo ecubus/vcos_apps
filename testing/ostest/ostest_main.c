@@ -40,9 +40,6 @@
 #include <sys/boardctl.h>
 #endif
 
-#if defined(CONFIG_RT_FRAMEWORK_MEMORY_PROTECTION) && (CONFIG_RT_FRAMEWORK_MEMORY_PROTECTION== 1)
-#include <arch/chip/mpu.h>
-#endif
 
 #include <nuttx/init.h>
 

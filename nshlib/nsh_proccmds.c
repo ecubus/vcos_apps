@@ -41,9 +41,6 @@
 #include "nsh.h"
 #include "nsh_console.h"
 
-#if defined(CONFIG_RT_FRAMEWORK_MEMORY_PROTECTION) && (CONFIG_RT_FRAMEWORK_MEMORY_PROTECTION== 1)
-#include <arch/chip/mpu.h>
-#endif
 
 /****************************************************************************
  * Pre-processor Definitions
@@ -72,6 +69,29 @@
 #    define PS_SHOW_STACKUSAGE
 #  endif
 #endif
+
+/****************************************************************************
+ * Private Definitions
+ ****************************************************************************/
+/* Using integer arithmetic to represent and print decimal values:
+ *
+ * Suppose 'Ratio' is a value in the range [0, 1] represented as an integer ratio.
+ * To print the value with 2 digits in the integer part and 1 digit in the decimal part,
+ * use the following calculation:
+ *
+ *     Integer part = Ratio * 1000 / 10;
+ *     Decimal part = Ratio * 1000 % 10;
+ *
+ * Explanation:
+ *   - 1000 = 100 (integer scale) * 10 (decimal scale)
+ *   - '100' implies two digits are reserved for the integer part.
+ *   - '10' implies one digit is reserved for the fractional part.
+ *
+ * This way, floating-point operations are avoided while maintaining precision.
+ */
+#define INTEGER_TWO_DIGIT (100U)
+#define DEVIMAL_ONE_DIGIT (10U)
+#define HIGH_ISR_STACK_USED_RATE (80U)
 
 /****************************************************************************
  * Private Types
@@ -504,7 +524,7 @@ static int ps_record(FAR struct nsh_vtbl_s *vtbl, FAR const char *dirpath,
     {
       /* Use fixed-point math with one decimal place */
 
-      status->td_stack_filled = 10 * 100 * status->td_stack_used /
+      status->td_stack_filled = DEVIMAL_ONE_DIGIT * INTEGER_TWO_DIGIT * status->td_stack_used /
                                 status->td_stack_size;
     }
 #  endif
@@ -660,8 +680,8 @@ static void ps_output(FAR struct nsh_vtbl_s *vtbl, bool heap,
 #endif
 #ifdef PS_SHOW_STACKUSAGE
            , status->td_stack_used
-           , status->td_stack_filled / 10 , status->td_stack_filled % 10
-           , (status->td_stack_filled >= 10 * 80 ? '!' : ' ')
+           , status->td_stack_filled / DEVIMAL_ONE_DIGIT  , status->td_stack_filled % DEVIMAL_ONE_DIGIT
+           , (status->td_stack_filled >= DEVIMAL_ONE_DIGIT * HIGH_ISR_STACK_USED_RATE ? '!' : ' ')
 #endif
 #ifdef NSH_HAVE_CPULOAD
            , status->td_cpuload
@@ -871,6 +891,24 @@ int cmd_ps(FAR struct nsh_vtbl_s *vtbl, int argc, FAR char **argv)
   bool heap = false;
   int i;
 
+#if defined(CONFIG_STACK_COLORATION) && (CONFIG_ARCH_INTERRUPTSTACK > 3)
+  int cpu_index = up_cpu_index();
+  size_t isrstackused = up_check_intstack(cpu_index);
+  uintptr_t intstackbase = up_get_intstackbase(cpu_index);
+  size_t stacksize = CONFIG_ARCH_INTERRUPTSTACK;
+  unsigned long isrstackfilled = DEVIMAL_ONE_DIGIT * INTEGER_TWO_DIGIT * isrstackused / stacksize;
+
+  nsh_output(vtbl, "-----------------------------------Interrupt Info----------------------------------------------\n");
+  nsh_output(vtbl, "COREID  START       END         STACK    USED   FILLED \n");
+  nsh_output(vtbl, "%6d  %10p  %10p  %-7lu  %-5lu  %3lu.%lu%%\n", cpu_index,
+                                                (void *)intstackbase,
+                                                (void *)((size_t)intstackbase + (size_t)stacksize),
+                                                (unsigned long)stacksize,
+                                                (unsigned long)isrstackused,
+                                                isrstackfilled / DEVIMAL_ONE_DIGIT, isrstackfilled % DEVIMAL_ONE_DIGIT);
+#endif
+
+  nsh_output(vtbl, "-----------------------------------Task Info---------------------------------------------------\n");
 #ifdef PS_SHOW_HEAPSIZE
   for (i = 1; i < argc; i++)
     {

@@ -734,6 +734,13 @@ config NSH_SC
 	depends on BMP
 	default n
 
+config NSH_CUSTOM_SC
+	bool "sc is custom implementation"
+	select NSH_SC
+	default n
+	---help---
+		sc is custom implementation for different chip
+
 if NSH_SC
 
 config NSH_UART_IRQ

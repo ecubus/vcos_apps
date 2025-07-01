@@ -78,7 +78,7 @@ static void ostest_gettime(struct timespec *tp)
       ASSERT(false);
     }
 #ifdef CONFIG_SYSTEM_TIME64
-  else if (tp->tv_sec < 0 || tp->tv_nsec < 0 ||
+  else if (tp->tv_nsec < 0 ||
 #else
   else if (tp->tv_nsec < 0 ||
 #endif

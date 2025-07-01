@@ -48,7 +48,11 @@ int cmd_sc(FAR struct nsh_vtbl_s *vtbl, int argc, FAR char **argv)
       if ((dst_core_id >= 0) && (dst_core_id != up_cpu_index()) \
         && (dst_core_id < CONFIG_NR_CPUS))
         {
+#ifdef CONFIG_NSH_CUSTOM_SC
+          up_custom_sc(dst_core_id);
+#else
           up_affinity_irq(CONFIG_NSH_UART_IRQ, 1 << dst_core_id);
+#endif
           return OK;
         }
       else if(dst_core_id == up_cpu_index())
@@ -63,8 +67,8 @@ int cmd_sc(FAR struct nsh_vtbl_s *vtbl, int argc, FAR char **argv)
     }
 
 out:
-  nsh_output(vtbl, "Usage: sc <dst-core-id>. max coreid: %d.\n", \
-            CONFIG_NR_CPUS);
+  nsh_output(vtbl, "Usage: sc <dst-core-id>. coreid range: %d - %d.\n", \
+            0, CONFIG_NR_CPUS-1);
   return ERROR;
 }
 #endif

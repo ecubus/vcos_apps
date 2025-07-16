@@ -140,6 +140,27 @@ bool trace_get_transmitting(void);
 
 void trace_set_transmitting(bool enable);
 
+/****************************************************************************
+ * Name: trace_get_core
+ *
+ * Description:
+ *   get trace core.
+ *
+ ****************************************************************************/
+
+int trace_get_core(void);
+
+/****************************************************************************
+ * Name: trace_set_core
+ *
+ * Description:
+ *   set trace core.
+ *
+ ****************************************************************************/
+
+void trace_set_core(int coreid);
+
+
 #undef EXTERN
 #ifdef __cplusplus
 }

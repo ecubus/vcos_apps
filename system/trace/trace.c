@@ -40,7 +40,8 @@
  * Private Data
  ****************************************************************************/
 
-static bool is_transmitting = false;
+static volatile bool is_transmitting = false;
+static volatile int  trace_core_id = 0;
 
 /****************************************************************************
  * Private Functions
@@ -370,6 +371,32 @@ static int trace_cmd_dumpudp(FAR const char *name, int index, int argc,
       fprintf(stderr,
               "trace dumpudp: dump failed\n");
       return ERROR;
+    }
+
+  return index;
+}
+
+/****************************************************************************
+ * Name: trace_cmd_select_core
+ ****************************************************************************/
+
+static int trace_cmd_select_core(FAR const char *name, int index, int argc,
+                             FAR char **argv, int notectlfd)
+{
+  int coreid = 0;
+
+  /* Usage: trace dumpudp {-s|-e} */
+
+  if (index == argc)
+    {
+      return ERROR;
+    }
+
+  if (index < argc)
+    {
+      coreid = strtoul(argv[index], NULL, 10);
+      trace_set_core(coreid);
+      index++;
     }
 
   return index;
@@ -1126,6 +1153,9 @@ int main(int argc, FAR char *argv[])
         {
           i = trace_cmd_dumpudp(name, i + 1, argc, argv, notectlfd);
         }
+      else if (strcmp(argv[i], "core") == 0) {
+          i = trace_cmd_select_core(name, i + 1, argc, argv, notectlfd);
+      }
 #endif
 #ifdef CONFIG_DRIVERS_NOTEDDR
       else if (strcmp(argv[i], "dumpddr") == 0)
@@ -1213,4 +1243,22 @@ bool trace_get_transmitting(void)
 void trace_set_transmitting(bool enable)
 {
   is_transmitting = enable;
+}
+
+/****************************************************************************
+ * Name: trace_get_core
+ ****************************************************************************/
+
+int trace_get_core(void)
+{
+  return trace_core_id;
+}
+
+/****************************************************************************
+ * Name: trace_set_core
+ ****************************************************************************/
+
+void trace_set_core(int coreid)
+{
+  trace_core_id = coreid;
 }

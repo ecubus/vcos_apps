@@ -8,6 +8,7 @@ config SYSTEM_NSH
 	default n
 	select NSH_LIBRARY
 	select SYSTEM_READLINE
+	depends on !DISABLE_FS
 	---help---
 		Enable the NuttShell (NSH) example
 

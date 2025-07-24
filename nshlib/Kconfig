@@ -17,7 +17,7 @@ config NSH_LIBRARY
 	default n
 	select NETUTILS_NETLIB if NET
 	select BOARDCTL if (!NSH_DISABLE_MKRD && !DISABLE_MOUNTPOINT) || NSH_ARCHINIT
-	select BOARDCTL_MKRD if !NSH_DISABLE_MKRD && !DISABLE_MOUNTPOINT
+	select BOARDCTL_MKRD if !NSH_DISABLE_MKRD && !DISABLE_MOUNTPOINT && !DISABLE_DRIVERS
 	---help---
 		Build the NSH support library.  This is used, for example, by
 		system/nsh in order to implement the full NuttShell (NSH).

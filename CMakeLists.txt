@@ -77,12 +77,12 @@ if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/frameworks)
   add_subdirectory(frameworks)
 endif()
 
-if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/components)
-  add_subdirectory(components)
-endif()
-
 if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/drivers)
   add_subdirectory(drivers)
+endif()
+
+if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/components)
+  add_subdirectory(components)
 endif()
 
 if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/vcos_examples)

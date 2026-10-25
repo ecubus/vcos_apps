@@ -83,6 +83,14 @@ endif()
 
 if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/components)
   add_subdirectory(components)
+
+# EcuBus PC MCAL Can — under vendor/ecubus (legacy fallback: vcos/mcal_pc)
+if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/../vendor/ecubus/components/Can)
+  add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../vendor/ecubus/components/Can ${CMAKE_CURRENT_BINARY_DIR}/mcal_pc_Can)
+elseif(EXISTS ${CMAKE_CURRENT_LIST_DIR}/../mcal_pc/components/Can)
+  add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../mcal_pc/components/Can ${CMAKE_CURRENT_BINARY_DIR}/mcal_pc_Can)
+endif()
+
 endif()
 
 if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/vcos_examples)

@@ -84,7 +84,7 @@ jobs:
           echo "app_ref=$APPS_REF" >> $GITHUB_OUTPUT
 
       - name: Checkout nuttx repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: apache/nuttx
           ref: ${{ steps.gittargets.outputs.os_ref }}
@@ -94,7 +94,7 @@ jobs:
         run: git -C sources/nuttx fetch --tags
 
       - name: Checkout apps repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: apache/nuttx-apps
           ref: ${{ steps.gittargets.outputs.apps_ref }}
@@ -227,7 +227,7 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: msys2/setup-msys2@v2
         with:
           msystem: MSYS
